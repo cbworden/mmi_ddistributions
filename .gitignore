@@ -1,0 +1,13 @@
+*.pyc
+build
+default.profraw
+*~
+.DS_Store
+.ipynb_checkpoints/
+.cache
+.coverage
+.coverage.xml
+**/.gmtcommands4
+**/gmt.history
+**/.ropeproject
+*.pytest*
