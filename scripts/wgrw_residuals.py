@@ -33,7 +33,7 @@ def main():
 
 
 def mmi_histogram(imt='pgv'):
-    mmi_residuals = SHAKE_DF['mmi_res_%s' % imt]
+    mmi_residuals = np.array(SHAKE_DF['mmi_res_%s' % imt])
     mmi_res_mean = np.mean(mmi_residuals)
     mmi_res_sd = np.std(mmi_residuals)
 
