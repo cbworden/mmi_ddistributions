@@ -26,3 +26,5 @@ Std of PSA10 at mean DYFI distance
 Std of PSA30 at mean DYFI distance
 
 events.txt and historic_events.txt give date/time/etc. info on the various event IDs.
+
+Note: Comcat event ids are included as the last column when available. 
