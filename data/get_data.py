@@ -5,11 +5,16 @@ import os
 import numpy as np
 import pandas as pd
 import scipy.constants as sp
-
 from shakelib.gmice.wgrw12 import WGRW12
-
+from shakelib.multigmpe import MultiGMPE
 from openquake.hazardlib.imt import PGA, PGV, SA
 
+# Since this is currently just CA earthquakes, lets just use the NSHMP ACR
+# GMPEs (active_crustal_nshmp2014)
+from openquake.hazardlib.gsim.abrahamson_2014 import AbrahamsonEtAl2014
+from openquake.hazardlib.gsim.boore_2014 import BooreEtAl2014
+from openquake.hazardlib.gsim.campbell_bozorgnia_2014 import CampbellBozorgnia2014
+from openquake.hazardlib.gsim.chiou_youngs_2014 import ChiouYoungs2014
 
 MSS_TO_G = 1 / sp.g
 M_TO_CM = 1 / 100
@@ -94,5 +99,7 @@ def read_shake_data():
         mmi_residuals = np.array(shake_df['mmi']) - mmi_pred
         shake_df['mmi_from_%s' % imt] = mmi_pred
         shake_df['mmi_res_%s' % imt] = mmi_residuals
+
+    # Append GMPE means and standard deviations
 
     return shake_df
