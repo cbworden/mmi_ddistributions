@@ -37,6 +37,8 @@ def main():
     ax.set_ylim(lim)
     ax.set_xlabel('Old Vs30')
     ax.set_ylabel('New Vs30')
+    fig_path = os.path.join('..', 'figs', 'vs30_compare.png')
+    fig.savefig(fig_path, dpi=300)
 
     n_nan = len(np.where(np.isnan(new_vs30))[0])
     print('There are %s nans.' % n_nan)

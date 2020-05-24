@@ -97,7 +97,8 @@ def read_shake_data():
             imt_data = imt_data * CSS_TO_G
         log_imt = np.log(imt_data)
         mmi_pred, dmda = gmice.getMIfromGM(
-            log_imt, IMT, dists=None, mag=None)
+            log_imt, IMT, dists=shake_df['r_hypo'],
+            mag=shake_df['magnitude'])
         mmi_residuals = np.array(shake_df['mmi']) - mmi_pred
         shake_df['mmi_from_%s' % imt] = mmi_pred
         shake_df['mmi_res_%s' % imt] = mmi_residuals
@@ -106,6 +107,8 @@ def read_shake_data():
     vs30_file = 'shakeGrid_add_vs30.csv'
     vs30_df = pd.read_csv(vs30_file)
     shake_df['CA Vs30'] = vs30_df['CA Vs30']
+
+    # Append distances
 
     # Append GMPE means and standard deviations
 
