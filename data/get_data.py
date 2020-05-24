@@ -104,11 +104,32 @@ def read_shake_data():
         shake_df['mmi_res_%s' % imt] = mmi_residuals
 
     # Append updated CA Vs30 values
-    vs30_file = 'shakeGrid_add_vs30.csv'
+    vs30_file = os.path.join('..', 'data', 'shakeGrid_add_vs30.csv')
     vs30_df = pd.read_csv(vs30_file)
-    shake_df['CA Vs30'] = vs30_df['CA Vs30']
 
-    # Append distances
+    # Check that number of rows match
+    if shake_df.shape[0] == vs30_df.shape[0]:
+        shake_df['CA Vs30'] = vs30_df['CA Vs30']
+    else:
+        raise ValueError(
+            'Number of rows in Vs30 dataframe do not match shake_df, '
+            'vs30_df probably needs to be recomputed with update_vs30.py.')
+
+    # Append distances, dip, ztor
+    rup_file = os.path.join('..', 'data', 'shakeGrid_add_rup_info.csv')
+    rup_df = pd.read_csv(rup_file)
+    if shake_df.shape[0] == rup_df.shape[0]:
+        # Keys to copy:
+        rkeys = [
+            'ztor', 'dip', 'r_rup', 'r_rup_var', 'r_jb', 'r_jb_var',
+            'r_x', 'r_y', 'r_y0']
+        for k in rkeys:
+            shake_df[k] = rup_df[k]
+    else:
+        raise ValueError(
+            'Number of rows in rupture dataframe do not match shake_df, '
+            'shakeGrid_add_rup_info.csv probably needs to be recomputed '
+            'with append_rupture_info.py.')
 
     # Append GMPE means and standard deviations
 
