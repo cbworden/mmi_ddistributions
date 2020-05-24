@@ -20,6 +20,7 @@ MSS_TO_G = 1 / sp.g
 M_TO_CM = 1 / 100
 CSS_TO_G = MSS_TO_G * M_TO_CM
 
+
 COL_NAMES = [
     'event_id',
     'sta_lat',
@@ -63,6 +64,7 @@ def read_shake_data():
     and correctly handling the row names.
     """
     this_mod = os.path.dirname(os.path.abspath(__file__))
+
     data_file = os.path.join(this_mod, 'shakeGrid.csv')
     shake_df = pd.read_csv(data_file, header=None, names=COL_NAMES)
 
@@ -99,6 +101,11 @@ def read_shake_data():
         mmi_residuals = np.array(shake_df['mmi']) - mmi_pred
         shake_df['mmi_from_%s' % imt] = mmi_pred
         shake_df['mmi_res_%s' % imt] = mmi_residuals
+
+    # Append updated CA Vs30 values
+    vs30_file = 'shakeGrid_add_vs30.csv'
+    vs30_df = pd.read_csv(vs30_file)
+    shake_df['CA Vs30'] = vs30_df['CA Vs30']
 
     # Append GMPE means and standard deviations
 
