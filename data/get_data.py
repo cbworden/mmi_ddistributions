@@ -20,6 +20,7 @@ MSS_TO_G = 1 / sp.g
 M_TO_CM = 1 / 100
 CSS_TO_G = MSS_TO_G * M_TO_CM
 
+
 COL_NAMES = [
     'event_id',
     'sta_lat',
@@ -63,6 +64,7 @@ def read_shake_data():
     and correctly handling the row names.
     """
     this_mod = os.path.dirname(os.path.abspath(__file__))
+
     data_file = os.path.join(this_mod, 'shakeGrid.csv')
     shake_df = pd.read_csv(data_file, header=None, names=COL_NAMES)
 
@@ -95,10 +97,39 @@ def read_shake_data():
             imt_data = imt_data * CSS_TO_G
         log_imt = np.log(imt_data)
         mmi_pred, dmda = gmice.getMIfromGM(
-            log_imt, IMT, dists=None, mag=None)
+            log_imt, IMT, dists=shake_df['r_hypo'],
+            mag=shake_df['magnitude'])
         mmi_residuals = np.array(shake_df['mmi']) - mmi_pred
         shake_df['mmi_from_%s' % imt] = mmi_pred
         shake_df['mmi_res_%s' % imt] = mmi_residuals
+
+    # Append updated CA Vs30 values
+    vs30_file = os.path.join('..', 'data', 'shakeGrid_add_vs30.csv')
+    vs30_df = pd.read_csv(vs30_file)
+
+    # Check that number of rows match
+    if shake_df.shape[0] == vs30_df.shape[0]:
+        shake_df['CA Vs30'] = vs30_df['CA Vs30']
+    else:
+        raise ValueError(
+            'Number of rows in Vs30 dataframe do not match shake_df, '
+            'vs30_df probably needs to be recomputed with update_vs30.py.')
+
+    # Append distances, dip, ztor
+    rup_file = os.path.join('..', 'data', 'shakeGrid_add_rup_info.csv')
+    rup_df = pd.read_csv(rup_file)
+    if shake_df.shape[0] == rup_df.shape[0]:
+        # Keys to copy:
+        rkeys = [
+            'ztor', 'dip', 'r_rup', 'r_rup_var', 'r_jb', 'r_jb_var',
+            'r_x', 'r_y', 'r_y0']
+        for k in rkeys:
+            shake_df[k] = rup_df[k]
+    else:
+        raise ValueError(
+            'Number of rows in rupture dataframe do not match shake_df, '
+            'shakeGrid_add_rup_info.csv probably needs to be recomputed '
+            'with append_rupture_info.py.')
 
     # Append GMPE means and standard deviations
 
