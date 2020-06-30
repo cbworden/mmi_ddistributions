@@ -54,7 +54,7 @@ def main():
     eq_df['comcat_id'] = ''
     nrows = eq_df.shape[0]
 
-    for i in range(307, nrows):
+    for i in range(nrows):
         print('i = %i' % i)
 
         eqmag = float(eq_df['mag'][i])
