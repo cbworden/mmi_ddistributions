@@ -43,6 +43,7 @@ def append_rup_info(shake_df):
     # Add columns for things we will populate
     shake_df['ztor'] = np.nan
     shake_df['dip'] = np.nan
+    shake_df['width'] = np.nan
     shake_df['r_rup'] = np.nan
     shake_df['r_rup_var'] = np.nan
     shake_df['r_jb'] = np.nan
@@ -99,6 +100,7 @@ def append_rup_info(shake_df):
             # Things that don't need sites
             ztor = rup.getDepthToTop()
             dip = rup.getDip()
+            width = rup.getWidth()
 
             # Get site lat/lons for this eqk
             idx = np.where(shake_df['event_id'] == ref_id)[0]
@@ -114,6 +116,7 @@ def append_rup_info(shake_df):
 
                 shake_df.at[idx, 'ztor'] = ztor
                 shake_df.at[idx, 'dip'] = dip
+                shake_df.at[idx, 'width'] = width
                 shake_df.at[idx, 'r_rup'] = rrup
                 shake_df.at[idx, 'r_rup_var'] = rrup_var
                 shake_df.at[idx, 'r_jb'] = rjb
@@ -152,6 +155,7 @@ def append_rup_info(shake_df):
             # Things that don't need sites
             ztor = rup.getDepthToTop()
             dip = rup.getDip()
+            width = rup.getWidth()
 
             # Get site lat/lons for this eqk
             idx = np.where(shake_df['event_id'] == ref_id)[0]
@@ -167,6 +171,7 @@ def append_rup_info(shake_df):
 
                 shake_df.at[idx, 'ztor'] = ztor
                 shake_df.at[idx, 'dip'] = dip
+                shake_df.at[idx, 'width'] = width
                 shake_df.at[idx, 'r_rup'] = rrup
                 shake_df.at[idx, 'r_rup_var'] = rrup_var
                 shake_df.at[idx, 'r_jb'] = rjb
